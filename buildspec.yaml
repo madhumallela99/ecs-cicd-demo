@@ -3,8 +3,9 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo Updating image URI
-      - sed -i "s|<IMAGE_URI>|$REPOSITORY_URI:$IMAGE_TAG|g" taskdef.json
+      - echo "Injecting image URI"
+      - export IMAGE_URI=$ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG
+      - sed -i "s|<IMAGE_URI>|$IMAGE_URI|g" taskdef.json
 
 artifacts:
   files:
