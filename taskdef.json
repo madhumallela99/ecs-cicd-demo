@@ -1,19 +1,21 @@
 {
   "family": "ecs-demo-task",
   "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "1024",
+  "memory": "3072",
+  "executionRoleArn": "arn:aws:iam::505342112116:role/ecsTaskExecutionRole",
   "containerDefinitions": [
     {
       "name": "demo-container",
-      "image": "505342112116.dkr.ecr.ap-south-1.amazonaws.com/ecs-demo-repo",
+      "image": "<IMAGE_URI>",
       "portMappings": [
         {
-          "containerPort": 8080
+          "containerPort": 8080,
+          "protocol": "tcp"
         }
       ],
       "essential": true
     }
-  ],
-  "requiresCompatibilities": ["FARGATE"],
-  "cpu": "256",
-  "memory": "512"
+  ]
 }
