@@ -6,7 +6,7 @@ pipeline {
     ACCOUNT_ID   = "505342112116"
     ECR_REPO     = "ecs-demo-repo"
     CLUSTER_NAME = "ecs-demo-cluster"
-    SERVICE_NAME = "ecs-demo-service"
+    SERVICE_NAME = "ECS-Task-Definition-service-puxei31h"
     TASK_FAMILY  = "ECS-Task-Definition"
     IMAGE_TAG    = "${BUILD_NUMBER}"
   }
@@ -97,4 +97,5 @@ pipeline {
     }
   }
 }
+
 
