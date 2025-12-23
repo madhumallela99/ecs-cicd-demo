@@ -62,15 +62,24 @@ pipeline {
 }
 
     stage("Deploy to ECS (Rolling Update)") {
-      steps {
-        sh '''
-        aws ecs update-service \
-          --cluster $CLUSTER_NAME \
-          --service $SERVICE_NAME \
-          --force-new-deployment
-        '''
-      }
-    }
+  steps {
+    sh '''
+    LATEST_TASK_DEF=$(aws ecs list-task-definitions \
+      --family-prefix ECS-Task-Definition \
+      --sort DESC \
+      --max-items 1 \
+      --query "taskDefinitionArns[0]" \
+      --output text)
+
+    aws ecs update-service \
+      --cluster ecs-demo-cluster \
+      --service ECS-Task-Definition-service-puxei31h \
+      --task-definition $LATEST_TASK_DEF \
+      --force-new-deployment
+    '''
+  }
+}
+
   }
 
   post {
@@ -82,6 +91,7 @@ pipeline {
     }
   }
 }
+
 
 
 
