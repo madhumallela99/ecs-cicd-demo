@@ -61,15 +61,16 @@ pipeline {
   }
 }
 
-    stage("Deploy to ECS (Rolling Update)") {
+   stage("Deploy to ECS (Rolling Update)") {
   steps {
     sh '''
     LATEST_TASK_DEF=$(aws ecs list-task-definitions \
       --family-prefix ECS-Task-Definition \
       --sort DESC \
-      --max-items 1 \
       --query "taskDefinitionArns[0]" \
-      --output text)
+      --output text | head -n 1)
+
+    echo "Deploying task definition: $LATEST_TASK_DEF"
 
     aws ecs update-service \
       --cluster ecs-demo-cluster \
@@ -91,6 +92,7 @@ pipeline {
     }
   }
 }
+
 
 
 
