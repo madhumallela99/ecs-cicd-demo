@@ -7,7 +7,7 @@ pipeline {
     ECR_REPO     = "ecs-demo-repo"
     CLUSTER_NAME = "ecs-demo-cluster"
     SERVICE_NAME = "ecs-demo-service"
-    TASK_FAMILY  = "ecs-demo-task"
+    TASK_FAMILY  = "ECS-Task-Definition"
     IMAGE_TAG    = "${BUILD_NUMBER}"
   }
 
@@ -97,3 +97,4 @@ pipeline {
     }
   }
 }
+
