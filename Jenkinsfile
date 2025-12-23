@@ -50,31 +50,16 @@ pipeline {
       }
     }
 
-    stage("Register New Task Definition") {
-      steps {
-        sh '''
-        aws ecs describe-task-definition \
-          --task-definition $TASK_FAMILY \
-          --query taskDefinition > taskdef.json
+   stage("Register New Task Definition") {
+  steps {
+    sh """
+    sed -i 's|<IMAGE_URI>|${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${IMAGE_TAG}|g' taskdef.json
 
-        cat taskdef.json | jq '
-          .containerDefinitions[0].image =
-          "'$ACCOUNT_ID'.dkr.ecr.'$AWS_REGION'.amazonaws.com/'$ECR_REPO':'$IMAGE_TAG'" |
-          del(
-            .taskDefinitionArn,
-            .revision,
-            .status,
-            .requiresAttributes,
-            .compatibilities,
-            .registeredAt,
-            .registeredBy
-          ) > new-taskdef.json
-
-        aws ecs register-task-definition \
-          --cli-input-json file://new-taskdef.json
-        '''
-      }
-    }
+    aws ecs register-task-definition \
+      --cli-input-json file://taskdef.json
+    """
+  }
+}
 
     stage("Deploy to ECS (Rolling Update)") {
       steps {
@@ -97,5 +82,6 @@ pipeline {
     }
   }
 }
+
 
 
